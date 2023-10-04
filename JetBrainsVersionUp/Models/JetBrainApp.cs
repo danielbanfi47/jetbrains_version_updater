@@ -27,4 +27,14 @@ internal class JetBrainApp
     {
         return $"DisplayName: {DisplayName}\nDisplayVersion: {DisplayVersion}\nInstallLocation: {InstallLocation}";
     }
+
+    public List<string> GetNiceFormat()
+    {
+        return new List<string>() 
+        { 
+            $"DisplayName: {DisplayName}", 
+            $"DisplayVersion: {DisplayVersion}", 
+            $"InstallLocation: {InstallLocation}" 
+        };
+    }
 }

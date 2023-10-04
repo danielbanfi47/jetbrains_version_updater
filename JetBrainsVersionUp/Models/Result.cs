@@ -17,6 +17,13 @@ internal class Result
         ResultApp = new List<JetBrainApp>();
     }
 
+    public Result(string statusMessage, bool success)
+    {
+        Success = success;
+        Message = statusMessage;
+        ResultApp = new List<JetBrainApp>();
+    }
+
     public Result(List<JetBrainApp> jetBrainApp)
     {
         Success = true;

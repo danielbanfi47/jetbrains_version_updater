@@ -34,8 +34,8 @@ internal class ActualVersionReader
                 jetBrainApp.DisplayName,
                 jetBrainApp.DisplayVersion,
                 jetBrainApp.JetBrainsProducts,
-                app_info.version,
-                app_info.buildNumber))
+                app_info.version ?? string.Empty,
+                app_info.buildNumber ?? string.Empty))
             {
                 return new Result(new List<JetBrainApp>{new JetBrainApp(
                     jetBrainApp.DisplayName.Replace(GetVersionFromName(jetBrainApp.DisplayName, jetBrainApp.JetBrainsProducts), app_info.version),
@@ -45,7 +45,7 @@ internal class ActualVersionReader
                     jetBrainApp.JetBrainsProducts)});
             }
 
-            return new Result("Nothing changed");
+            return new Result("Nothing changed", true);
         }
         catch (Exception ex) 
         { 
