@@ -1,26 +1,27 @@
 ﻿using JetBrainsVersionUp.Models;
+using JetBrainsVersionUp.Services.Abstraction;
 using System.Text.Json;
 
 namespace JetBrainsVersionUp.Services;
 
-internal class ActualVersionReader
+public class ActualVersionReader : IActualVersionReader
 {
     private readonly string _json_name = "product-info.json";
-    
+
     public async Task<Result> GetActualVersion(JetBrainApp? jetBrainApp)
     {
         if (jetBrainApp == null)
         {
             return new Result("No install information");
         }
-        
+
         var json_full_path = Path.Combine(jetBrainApp.InstallLocation, _json_name);
 
         if (!File.Exists(json_full_path))
         {
             return new Result("No info file in the installation folder");
         }
- 
+
         try
         {
             using FileStream openStream = File.OpenRead(json_full_path);
@@ -47,9 +48,9 @@ internal class ActualVersionReader
 
             return new Result("Nothing changed", true);
         }
-        catch (Exception ex) 
-        { 
-            return new Result(ex.Message); 
+        catch (Exception ex)
+        {
+            return new Result(ex.Message);
         }
     }
 
@@ -68,10 +69,10 @@ internal class ActualVersionReader
     }
 
     private string GetVersionFromName(
-        string jetBrainNameFromRegistry, 
+        string jetBrainNameFromRegistry,
         JetBrainsProducts jetBrainsProductFromRegistry)
     {
-        return 
+        return
             jetBrainNameFromRegistry.Substring(
             jetBrainNameFromRegistry.IndexOf(jetBrainsProductFromRegistry.ToString()) +
             jetBrainsProductFromRegistry.ToString().Length + 1).Trim();

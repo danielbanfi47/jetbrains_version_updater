@@ -1,6 +1,6 @@
 ﻿namespace JetBrainsVersionUp.Models;
 
-internal class Result
+public class Result
 {
     public bool Success { get; set; }
     public List<JetBrainApp> ResultApp { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace JetBrainsVersionUp.Models;
 
-enum JetBrainsProducts
+public enum JetBrainsProducts
 {
     PyCharm,
     IDEA

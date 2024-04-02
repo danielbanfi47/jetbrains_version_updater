@@ -1,11 +1,12 @@
 ﻿using JetBrainsVersionUp.Models;
+using JetBrainsVersionUp.Services.Abstraction;
 using Microsoft.Win32;
-using System.Security;
 using System.Runtime.Versioning;
+using System.Security;
 
 namespace JetBrainsVersionUp.Services;
 
-internal class RegistryService
+public class RegistryService : IRegistryService
 {
     private readonly string _uninstall_path = "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
     private readonly string _display_name = "DisplayName";
@@ -14,7 +15,7 @@ internal class RegistryService
 
 
     [SupportedOSPlatform("windows")]
-    public Result FindIntellyJInRegistry(JetBrainsProducts jetBrainsJProducts)
+    public Result FindIntelliJInRegistry(JetBrainsProducts jetBrainsJProducts)
     {
         try
         {
@@ -36,22 +37,22 @@ internal class RegistryService
             foreach (var f_app in founded_apps)
             {
                 var full_registry_path = $"{_uninstall_path}{f_app}";
-                var intelly_app = Registry.LocalMachine.OpenSubKey(full_registry_path, false);
-                var intelly_app_values = intelly_app?.GetValueNames().ToList();
-                if (intelly_app == null ||
-                    intelly_app_values == null ||
-                    !intelly_app_values.Contains(_display_name) ||
-                    !intelly_app_values.Contains(_display_version) ||
-                    !intelly_app_values.Contains(_install_location))
+                var intelli_app = Registry.LocalMachine.OpenSubKey(full_registry_path, false);
+                var intelli_app_values = intelli_app?.GetValueNames().ToList();
+                if (intelli_app == null ||
+                    intelli_app_values == null ||
+                    !intelli_app_values.Contains(_display_name) ||
+                    !intelli_app_values.Contains(_display_version) ||
+                    !intelli_app_values.Contains(_install_location))
                 {
                     continue;
                 }
 
-                var display_name_key = intelly_app.GetValue(_display_name)?.ToString();
-                var display_version_key = intelly_app.GetValue(_display_version)?.ToString();
-                var install_location_key = intelly_app.GetValue(_install_location)?.ToString();
+                var display_name_key = intelli_app.GetValue(_display_name)?.ToString();
+                var display_version_key = intelli_app.GetValue(_display_version)?.ToString();
+                var install_location_key = intelli_app.GetValue(_install_location)?.ToString();
 
-                intelly_app.Close();
+                intelli_app.Close();
 
                 resultList.Add(new JetBrainApp(
                     display_name_key,
@@ -72,13 +73,13 @@ internal class RegistryService
     }
 
     [SupportedOSPlatform("windows")]
-    public Result UpdateIntellyJInRegistry(JetBrainApp? jetBrainApp)
+    public Result UpdateIntelliJInRegistry(JetBrainApp? jetBrainApp)
     {
         if (jetBrainApp == null)
         {
             return new Result();
         }
-        
+
         try
         {
             var key = Registry.LocalMachine.OpenSubKey(jetBrainApp.RegistryLocation, true);

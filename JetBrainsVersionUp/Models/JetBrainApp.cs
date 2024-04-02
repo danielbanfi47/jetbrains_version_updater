@@ -1,6 +1,6 @@
 ﻿namespace JetBrainsVersionUp.Models;
 
-internal class JetBrainApp
+public class JetBrainApp
 {
     public string DisplayName { get; set; }
     public string DisplayVersion { get; set; }
@@ -30,11 +30,11 @@ internal class JetBrainApp
 
     public List<string> GetNiceFormat()
     {
-        return new List<string>() 
-        { 
-            $"DisplayName: {DisplayName}", 
-            $"DisplayVersion: {DisplayVersion}", 
-            $"InstallLocation: {InstallLocation}" 
+        return new List<string>()
+        {
+            $"DisplayName: {DisplayName}",
+            $"DisplayVersion: {DisplayVersion}",
+            $"InstallLocation: {InstallLocation}"
         };
     }
 }

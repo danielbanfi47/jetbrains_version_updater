@@ -1,16 +1,30 @@
 ﻿using JetBrainsVersionUp.Models;
 using JetBrainsVersionUp.Services;
 using Serilog;
+using System.IO.Abstractions;
 
-var runService = new RunService(
-    new RegistryService(), 
+var registryService = new RegistryService();
+
+var runVersionUpdateService = new RunVersionUpdateService(
+    registryService,
     new ActualVersionReader(),
     new LoggerConfiguration()
                            .WriteTo.Console()
                            .MinimumLevel.Debug()
                            .WriteTo.File("JetBrainVersiopnUpdater.log")
-                           .CreateLogger()); 
+                           .CreateLogger());
 
-await runService.Run(JetBrainsProducts.PyCharm);
-await runService.Run(JetBrainsProducts.IDEA);
+var runIniFileUpdateService = new RunIniFileUpdateService(
+    registryService,
+    new FileSystem(),
+    new LoggerConfiguration()
+                           .WriteTo.Console()
+                           .MinimumLevel.Debug()
+                           .WriteTo.File("JetBrainVersiopnUpdater.log")
+                           .CreateLogger());
+
+await runVersionUpdateService.Run(JetBrainsProducts.PyCharm);
+await runIniFileUpdateService.Run(JetBrainsProducts.PyCharm);
+await runVersionUpdateService.Run(JetBrainsProducts.IDEA);
+await runIniFileUpdateService.Run(JetBrainsProducts.IDEA);
 Thread.Sleep(2500);
